@@ -123,12 +123,14 @@ class ProdutoResource extends Resource
                             }),
                         FileUpload::make('foto')
                             ->label('Fotos')
-                            ->columnSpanFull()
-                            ->panelLayout('grid')
+                            ->directory('fotos-produtos')
+                            ->visibility('public')
+                          //  ->columnSpanFull()
+                           // ->panelLayout('grid')
                             ->downloadable()
-                            ->multiple()
-                            ->maxSize(4096)
-                            ->maxFiles(3)
+                           // ->multiple()
+                            ->maxSize(1000)
+                            ->maxFiles(1)
                             ->hidden(function (Get $get) {
                                 if ($get('tipo') == 1) {
                                     return false;
@@ -189,6 +191,14 @@ class ProdutoResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('catalogo')
+                    ->label('Catálogo')
+                    ->url(route('catalogo'))
+                    ->icon('heroicon-s-shopping-bag')
+                    ->openUrlInNewTab()
+                    ->color('success'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

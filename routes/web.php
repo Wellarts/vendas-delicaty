@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\ComprovantesController;
 use App\Http\Controllers\ControllerNovaParcela;
 use App\Http\Controllers\ControllerNovaParcelaPagar;
@@ -25,4 +26,5 @@ Route::get('pdf/{id}',[ComprovantesController::class, 'geraPdf'])->name('comprov
 Route::get('pdfPdv/{id}',[ComprovantesController::class, 'geraPdfPDV'])->name('comprovantePDV');
 Route::get('novaParcela/{id}',[ControllerNovaParcela::class, 'novaParcela'])->name('novaParcela');
 Route::get('novaParcelaPagar/{id}',[ControllerNovaParcelaPagar::class, 'novaParcelaPagar'])->name('novaParcelaPagar');
+Route::get('catalogo', [CatalogoController::class, 'index'])->name('catalogo');
 
