@@ -137,7 +137,21 @@ class ProdutoResource extends Resource
                                 } elseif ($get('tipo') == 2) {
                                     return true;
                                 }
-                            })
+                            }),
+                        Forms\Components\Select::make('categoria_id')
+                            ->label('Categoria')
+                            ->relationship('categoria', 'nome')
+                            ->searchable()
+                            ->preload()
+                            ->required(false)
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('nome')
+                                    ->label('Nome')
+                                    ->required()
+                                    
+
+                            ])
+
                     ])->columns(2),
             ]);
     }
