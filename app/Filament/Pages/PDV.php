@@ -90,22 +90,7 @@ class PDV extends Page implements HasForms, HasTable
             ->schema([
                 Section::make('Ponto de Venda')
                     ->columns(4)
-                    ->schema([
-                        //     TextInput::make('produto_id')
-                        //         ->numeric()
-                        //         ->label('Produto')
-                        //         ->autocomplete()
-                        //         ->autofocus()
-                        //         ->extraInputAttributes(['tabindex' => 1])
-                        //         ->live(debounce: 900)
-                        //         ->afterStateUpdated(function ($state, Get $get, Set $set) {
-                        //           //  dd($get('produto_id'));
-                        //           //  $produto = Produto::where('codbar','=', $state)->first();
-
-                        //           //  $set('produto_nome', $produto->nome);
-                        //             $this->updated($state, $state);
-                        //         }),
-                        //  //   TextInput::make('produto_nome')
+                    ->schema([                        
                         Select::make('produto_id')
                             ->columnSpan(2)
                             ->label('Produto')
@@ -196,18 +181,18 @@ class PDV extends Page implements HasForms, HasTable
                 ->alignCenter()
                 ->label('Valor Unitário')
                 ->money('BRL'),
-            // TextInputColumn::make('acres_desc')
-            //     ->alignCenter()
-            //     ->label('Acres/Desc')
-            //     ->updateStateUsing(function (Model $record, $state) {
-            //         // Aceita vírgula como separador decimal
-            //         $valor = str_replace(',', '.', $state);
-            //         $valor = floatval($valor);
-            //         $record->sub_total = (((float)$record->qtd * $record->valor_venda) + $valor);
-            //         $record->acres_desc = $valor;
-            //         $record->save();
-            //     })
-            //     ->label('Acres/Desc'),
+            TextInputColumn::make('acres_desc')
+                ->alignCenter()
+                ->label('Acres/Desc')
+                ->updateStateUsing(function (Model $record, $state) {
+                    // Aceita vírgula como separador decimal
+                    $valor = str_replace(',', '.', $state);
+                    $valor = floatval($valor);
+                    $record->sub_total = (((float)$record->qtd * $record->valor_venda) + $valor);
+                    $record->acres_desc = $valor;
+                    $record->save();
+                })
+                ->label('Acres/Desc'),
             TextColumn::make('sub_total')
                 ->alignCenter()
                 ->label('Sub-Total')
@@ -324,8 +309,28 @@ class PDV extends Page implements HasForms, HasTable
                                                     '2xl' => 2,
                                                 ])
                                                 ->label('Endereço'),
-                                            TextInput::make('profissao')
-                                                ->label('Profissão'),
+                                            // TextInput::make('profissao')
+                                            //     ->label('Profissão'),
+                                            Select::make('estado_id')
+                                                ->label('Estado')
+                                                ->native(false)
+                                                ->searchable()
+                                                ->required()
+                                                ->options(Estado::all()->pluck('nome', 'id')->toArray())
+                                                ->reactive(),
+                                           Select::make('cidade_id')
+                                                ->label('Cidade')
+                                                ->native(false)
+                                                ->searchable()
+                                                ->required()
+                                                ->options(function (callable $get) {
+                                                    $estado = Estado::find($get('estado_id'));
+                                                    if (!$estado) {
+                                                        return Estado::all()->pluck('nome', 'id');
+                                                    }
+                                                    return $estado->cidade->pluck('nome', 'id');
+                                                })
+                                                ->reactive(),
                                             TextInput::make('email')
                                                 ->columnSpan([
                                                     'default' => 1,
@@ -405,7 +410,7 @@ class PDV extends Page implements HasForms, HasTable
                                     TextInput::make('percent_acres_desc')
                                         ->label('Percentual')
                                         ->visible(fn (callable $get) => $get('tipo_acres_desc') === 'Porcentagem')
-                                        ->numeric()
+                                       // ->numeric()
                                         ->hint('Para desconto use um valor negativo Ex. -10')
                                         ->extraInputAttributes(['style' => 'font-weight: bolder; font-size: 1.3rem; color: #a39b07ff;'])
                                         ->suffix('%')
@@ -428,7 +433,7 @@ class PDV extends Page implements HasForms, HasTable
                                         ->label('Valor Desconto/Acréscimo')
                                         ->hint('Para desconto use um valor negativo Ex. -10')
                                         ->hidden(fn (callable $get) => $get('tipo_acres_desc') !== 'Valor')
-                                        ->numeric()
+                                       // ->numeric()
                                         ->prefix('R$')
                                         ->extraInputAttributes(['style' => 'font-weight: bolder; font-size: 1.3rem; color: #a39b07ff;'])
                                         ->required(false)
