@@ -29,6 +29,7 @@ class Lucratividade extends Page implements HasTable
 
     protected static ?int $navigationSort = 17;
 
+   protected static bool $shouldRegisterNavigation = false;
     
 
 

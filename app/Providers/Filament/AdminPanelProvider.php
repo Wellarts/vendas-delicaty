@@ -54,7 +54,7 @@ class AdminPanelProvider extends PanelProvider
               //  Widgets\FilamentInfoWidget::class,
                 PagarHojeStatsOverview::class,
                 ReceberHojeStatsOverview::class,
-                VendasMesChart::class,
+              //  VendasMesChart::class,
                 VendasPDVMesChart::class,
                 ComprasMesChart::class,
                 TotalVendasPorCliente::class,
