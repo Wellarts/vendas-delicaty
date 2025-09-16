@@ -23,6 +23,8 @@ class CategoriaResource extends Resource
 
     protected static ?string $navigationGroup = 'Cadastros';
 
+    protected static ?int $navigationSort = 8;
+
     public static function form(Form $form): Form
     {
         return $form

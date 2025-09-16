@@ -54,7 +54,7 @@ class PDV extends Page implements HasForms, HasTable
 
     protected static ?string $navigationGroup = 'Ponto de Venda';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
     public ?array $data = [];
 
