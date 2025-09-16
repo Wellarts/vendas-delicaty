@@ -114,8 +114,20 @@
     </table>
 
     <div class="total">
-        VALOR TOTAL: R$ {{$vendas->valor_total}}
-    </div>
+            VALOR TOTAL: R$ {{$vendas->valor_total}}
+            @if(!empty($vendas->desconto_percent) && $vendas->desconto_percent > 0)
+                <br>
+                Desconto: {{$vendas->desconto_percent}}% (R$ {{$vendas->desconto_valor}})
+            @endif
+            @if(!empty($vendas->acrescimo_percent) && $vendas->acrescimo_percent > 0)
+                <br>
+                Acréscimo: {{$vendas->acrescimo_percent}}% (R$ {{$vendas->acrescimo_valor}})
+            @endif
+            @if(!empty($vendas->valor_total_desconto) && $vendas->valor_total_desconto != $vendas->valor_total)
+                <br>
+                <strong>VALOR FINAL: R$ {{$vendas->valor_total_desconto}}</strong>
+            @endif
+        </div>
 
     <div class="signature">
         <hr>

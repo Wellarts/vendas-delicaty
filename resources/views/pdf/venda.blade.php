@@ -6,8 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+    </script>
 
     <title>Comprovante de Venda</title>
     <style>
@@ -36,12 +39,13 @@
             margin: 0;
         }
 
-        .table th, .table td {
+        .table th,
+        .table td {
             vertical-align: middle;
         }
 
         .total {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             text-align: right;
             margin-top: 20px;
@@ -82,10 +86,10 @@
         </thead>
         <tbody class="text-center">
             <tr>
-                <td>{{$vendas->id}}</td>
-                <td>{{$vendas->cliente->nome}}</td>
+                <td>{{ $vendas->id }}</td>
+                <td>{{ $vendas->cliente->nome }}</td>
                 <td>{{ \Carbon\Carbon::parse($vendas->data_venda)->format('d/m/Y') }}</td>
-                <td>{{$vendas->formaPgmto->nome}}</td>
+                <td>{{ $vendas->formaPgmto->nome }}</td>
             </tr>
         </tbody>
     </table>
@@ -102,19 +106,54 @@
         </thead>
         <tbody class="text-center">
             @foreach ($vendas->itensVenda as $itens)
-            <tr>
-                <td>{{$itens->produto->nome}}</td>
-                <td>R$ {{$itens->valor_venda}}</td>
-                <td>{{$itens->qtd}}</td>
-                <td>R$ {{$itens->acres_desc}}</td>
-                <td>R$ {{$itens->sub_total}}</td>
-            </tr>
+                <tr>
+                    <td>{{ $itens->produto->nome }}</td>
+                    <td>R$ {{ $itens->valor_venda }}</td>
+                    <td>{{ $itens->qtd }}</td>
+                    <td>R$ {{ $itens->acres_desc }}</td>
+                    <td>R$ {{ $itens->sub_total }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="total">
-        VALOR TOTAL: R$ {{$vendas->valor_total}}
+        @if ($vendas->tipo_acres_desc == 'Porcentagem')
+            <div class="summary-row">
+                @if (!empty($vendas->valor_total))
+                    <div class="summary-row">
+                        <span>Valor Total Produtos:</span>
+                        <span>R$ {{ number_format($vendas->valor_total, 2, ',', '.') }}</span>
+                    </div>
+                @endif
+                <span style="font-size: 14px; color: #aaa;">Desconto/Acréscimo:</span>
+                <span>
+                    {{ $vendas->percent_acres_desc }}%
+                    @php
+                        $valorTotal = $vendas->valor_total ?? 0;
+                        $valorFinal = $vendas->valor_total_desconto ?? 0;
+                        $valorAcresDesc = $valorTotal - $valorFinal;
+                    @endphp
+                    @if ($valorAcresDesc != 0)
+                        (
+                        {{ $vendas->percent_acres_desc < 0 ? 'Desconto' : 'Acréscimo' }}:
+                        R$ {{ number_format(abs($valorAcresDesc), 2, ',', '.') }}
+                        )
+                    @endif
+                </span>
+            </div>
+        @elseif($vendas->tipo_acres_desc == 'Valor')
+            <div class="summary-row">
+                <span style="font-size: 14px; color: #aaa;">Valor Desconto/Acréscimo:</span>
+                <span>R$ {{ number_format($vendas->valor_acres_desc, 2, ',', '.') }}</span>
+            </div>
+        @endif
+        @if (!empty($vendas->valor_total_desconto))
+            <div class="summary-row">
+                <strong>Valor Final:</strong>
+                <strong>R$ {{ number_format($vendas->valor_total_desconto, 2, ',', '.') }}</strong>
+            </div>
+        @endif
     </div>
 
     <div class="signature">

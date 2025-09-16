@@ -17,11 +17,17 @@ class VendaPDV extends Model
         'itens_pdv_id',
         'funcionario_id',
         'data_venda',
+        'tipo_registro',
         'forma_pgmto_id',
+        'tipo_acres_desc',
+        'valor_acres_desc',
+        'percent_acres_desc',
+        'valor_total_desconto',
         'valor_total',
         'lucro_venda',
         'obs',
-
+        'financeiro',
+        'parcelas',
     ];
 
     public function cliente()
