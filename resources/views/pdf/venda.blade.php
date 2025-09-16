@@ -72,7 +72,13 @@
     </div>
 
     <div class="text-center mb-4">
-        <h4>Comprovante de Venda</h4>
+            <h4>
+                @if(isset($vendas->tipo_registro) && $vendas->tipo_registro == 'orcamento')
+                    Comprovante de Orçamento
+                @else
+                    Comprovante de Venda
+                @endif
+            </h4>
     </div>
 
     <table class="table table-bordered">
