@@ -50,7 +50,7 @@ class Dashboard extends \Filament\Pages\Dashboard
         //     ])
         //     ->send();
 
-        PDV::whereNotIn('venda_p_d_v_id', VendaPDV::pluck('id'))->delete();
+       // PDV::whereNotIn('venda_p_d_v_id', VendaPDV::pluck('id'))->delete();
 
         //***********NOTIFICAÇÃO DE CONTAS A RECEBER*************
         $contasReceberVencer = ContasReceber::where('status','=','0')->get();
