@@ -24,26 +24,17 @@ class Produto extends Model
         'total_lucratividade',
         'foto',
         'tipo',
+        'categoria_id',
     ];
 
     protected $casts = [
         'foto' => 'array',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
-
-    //     static::deleting(function ($produto) {
-    //       //  dd($produto->itensVenda()->count() > 0 ,' - ', $produto->pdv()->count() > 0);
-    //         if ($produto->itensVenda()->count() > 0 || $produto->pdv()->count() > 0) {
-    //             // Verifica se o produto está vinculado a vendas ou PDV
-    //             // Se estiver, não permite a exclusão e lança uma exceção
-    //             // Lança uma exceção que será capturada pelo Filament
-    //             throw new \Exception('Este produto não pode ser excluído porque está vinculado a uma ou mais vendas.');
-    //         }
-    //     });
-    // }
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
 
     public function ProdutoFornecedor()
     {

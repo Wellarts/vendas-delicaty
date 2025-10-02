@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Filament\Notifications\Notification;
+use Filament\Tables\Filters\SelectFilter;
 
 class ProdutoResource extends Resource
 {
@@ -137,7 +138,21 @@ class ProdutoResource extends Resource
                                 } elseif ($get('tipo') == 2) {
                                     return true;
                                 }
-                            })
+                            }),
+                        Forms\Components\Select::make('categoria_id')
+                            ->label('Categoria')
+                            ->relationship('categoria', 'nome')
+                            ->searchable()
+                            ->preload()
+                            ->required(false)
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('nome')
+                                    ->label('Nome')
+                                    ->required()
+                                    
+
+                            ])
+
                     ])->columns(2),
             ]);
     }
@@ -167,7 +182,10 @@ class ProdutoResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('codbar')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('categoria.nome')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('estoque')
+                    ->alignCenter()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valor_compra')
                     ->money('BRL'),
@@ -190,7 +208,10 @@ class ProdutoResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                //
+                SelectFilter::make('categoria_id')
+                    ->label('Categoria')
+                    ->relationship('categoria', 'nome')
+                    ->multiple()
             ])
             ->headerActions([
                 Tables\Actions\Action::make('catalogo')

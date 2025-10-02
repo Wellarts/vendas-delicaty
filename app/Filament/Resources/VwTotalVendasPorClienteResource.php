@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VwTotalVendasPorClienteResource\Pages;
 use App\Models\VwTotalVendasPorCliente;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -22,19 +21,21 @@ class VwTotalVendasPorClienteResource extends Resource
 
     protected static ?int $navigationSort = 20;
 
-    
+
 
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('valor_total',
-             'desc')
+            ->defaultSort(
+                'valor_total_desconto',
+                'desc'
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('cliente_nome')
                     ->label('Cliente')
-                    ->sortable()                    
+                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('valor_total')
+                Tables\Columns\TextColumn::make('valor_total_desconto')
                     ->label('Valor Total')
                     ->money('BRL')
                     ->badge()
@@ -43,8 +44,8 @@ class VwTotalVendasPorClienteResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ultima_compra')
                     ->label('Última Compra')
-                    ->color(fn ($record) => $record->ultima_compra == 'Nunca comprou' ? 'danger' : 'success')              
-                    ->sortable(),                    
+                    ->color(fn ($record) => $record->ultima_compra == 'Nunca comprou' ? 'danger' : 'success')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -65,6 +66,13 @@ class VwTotalVendasPorClienteResource extends Resource
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
             ])
+        ->headerActions([
+        //  Tables\Actions\Action::make('gerar_pdf')
+        //     ->label('Relatório Valor Vendido por Cliente - PDF')
+        //     ->icon('heroicon-o-arrow-down-tray')
+        //     ->url(route('relatorio.vendas.por.cliente'), true)
+        //     ->color('success'),
+         ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
