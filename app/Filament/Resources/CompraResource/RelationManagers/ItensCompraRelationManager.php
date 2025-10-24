@@ -14,13 +14,8 @@ use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Tables\Columns\Summarizers\Count;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
-use function Livewire\after;
 
 class ItensCompraRelationManager extends RelationManager
 {
@@ -39,9 +34,9 @@ class ItensCompraRelationManager extends RelationManager
                 Forms\Components\Hidden::make('compra_id')
                     ->default((function ($livewire): int {
                         return $livewire->ownerRecord->id;
-                    })),                
+                    })),
                 Forms\Components\Select::make('produto_id')
-                    ->label('Produto')                    
+                    ->label('Produto')
                     ->relationship('produto', 'nome')
                     ->searchable([
                         'nome',
@@ -70,14 +65,14 @@ class ItensCompraRelationManager extends RelationManager
                     ->native(false)
                     ->required()
                     ->label('Produto'),
-                    // ->afterStateUpdated(
-                    //     function ($state, callable $set) {                           
-                           
-                    //         if ($state) {
-                    //             $set('valor_compra', $state);
-                    //         }
-                    //     }
-                    // ),
+                // ->afterStateUpdated(
+                //     function ($state, callable $set) {
+
+                //         if ($state) {
+                //             $set('valor_compra', $state);
+                //         }
+                //     }
+                // ),
                 Forms\Components\TextInput::make('valor_compra')
                     ->numeric()
                     ->label('Valor Compra')
@@ -126,22 +121,22 @@ class ItensCompraRelationManager extends RelationManager
                     ->hidden(fn($livewire) => $livewire->ownerRecord->status_caixa == 1)
                     ->after(function ($data) {
                         $produto = Produto::find($data['produto_id']);
-                        $compra = Compra::find($data['compra_id']);
+                        $compra  = Compra::find($data['compra_id']);
                         $produto->estoque += $data['qtd'];
                         $produto->valor_compra = $data['valor_compra'];
-                        $produto->valor_venda = ($produto->valor_compra + ($data['valor_compra'] * ($produto->lucratividade / 100)));
+                        $produto->valor_venda  = ($produto->valor_compra + ($data['valor_compra'] * ($produto->lucratividade / 100)));
                         $compra->valor_total += $data['sub_total'];
                         $compra->save();
                         $produto->save();
 
                         $prodFornecedor = [
-                            'compra_id' => $data['compra_id'],
+                            'compra_id'  => $data['compra_id'],
                             'produto_id' => $produto->id,
-                            'qtd' => $data['qtd'],
-                            'valor' => $data['valor_compra'],
+                            'qtd'        => $data['qtd'],
+                            'valor'      => $data['valor_compra'],
 
                         ];
-                       // dd($prodFornecedor);
+                        // dd($prodFornecedor);
                         ProdutoFornecedor::create($prodFornecedor);
                     })
                     ->label('Adicionar Produtos'),
@@ -156,9 +151,10 @@ class ItensCompraRelationManager extends RelationManager
                             $addFluxoCaixa = [
                                 'valor' => ($livewire->ownerRecord->valor_total * -1),
                                 'tipo'  => 'DEBITO',
+                                'id_lancamento' => $livewire->ownerRecord->id,
                                 'obs'   => 'Pagamento de Compra nº: ' . $livewire->ownerRecord->id . '',
                             ];
-                            $compra = Compra::find($livewire->ownerRecord->id);
+                            $compra               = Compra::find($livewire->ownerRecord->id);
                             $compra->status_caixa = 1;
                             $compra->save();
 
@@ -179,7 +175,7 @@ class ItensCompraRelationManager extends RelationManager
                     })
 
                     ->requiresConfirmation()
-                    ->modalIcon('heroicon-o-currency-dollar')
+                    ->modalIcon('heroicon-o-currency-dollar'),
 
 
             ])
@@ -187,40 +183,79 @@ class ItensCompraRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->mutateFormDataUsing(function (array $data, $record) {
-                        $produto = Produto::find($record->produto_id);
+                        $produto      = Produto::find($record->produto_id);
                         $idItemCompra = ItensCompra::find($record->id);
-                        $compra = Compra::find($record->compra_id);
+                        $compra       = Compra::find($record->compra_id);
 
                         // dd($data['qtd'].'  -  '.- $idItemCompra->qtd);
                         $produto->estoque += ($data['qtd'] - $idItemCompra->qtd);
                         $produto->valor_compra = $record->valor_compra;
-                        $produto->valor_venda = ($produto->valor_compra + ($record->valor_compra * ($produto->lucratividade / 100)));
+                        $produto->valor_venda  = ($produto->valor_compra + ($record->valor_compra * ($produto->lucratividade / 100)));
                         $compra->valor_total += ($data['sub_total'] - $idItemCompra->sub_total);
                         // dd($data['sub_total'], $idItemCompra->sub_total,  $compra->valor_total);
                         $compra->save();
-                        $produto->save();
-                        return $data;
+                        $produto->save();                       
+
+                        $prodFornecedor = [
+                            'compra_id'  => $record->compra_id,
+                            'produto_id' => $produto->id,
+                            'qtd'        => $data['qtd'],
+                            'valor'      => $data['valor_compra'],
+
+                        ];                        
+                        ProdutoFornecedor::where('compra_id', $record->compra_id)
+                            ->where('produto_id', $produto->id)
+                            ->update($prodFornecedor);
+
+                     return $data;
+
                     }),
                 Tables\Actions\DeleteAction::make()
                     ->after(function ($data, $record) {
                         $produto = Produto::find($record->produto_id);
-                        $compra = Compra::find($record->compra_id);
+                        $compra  = Compra::find($record->compra_id);
                         $compra->valor_total -= $record->sub_total;
-                        $produto->estoque -= ($record->qtd);
+                        $produto->estoque    -= ($record->qtd);
                         $produto->save();
                         $compra->save();
 
+                        
+                    })
+                    ->before(function ($data, $record) {
                         $prodFornecedor = [
-                            'compra_id' => $record->compra_id,
-                            'produto_id' => $produto->id,
+                            'compra_id'  => $record->compra_id,
+                            'produto_id' => $record->produto_id,
+
 
                         ];
-                        ProdutoFornecedor::destroy($prodFornecedor);
+                        ProdutoFornecedor::destroy($prodFornecedor);                        ProdutoFornecedor::where('compra_id', $record->compra_id)
+                            ->where('produto_id', $record->produto_id)
+                            ->delete();
+                            
                     }),
+                        
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->after(function ($data, $records) {
+                            foreach ($records as $record) {
+                                $produto = Produto::find($record->produto_id);
+                                $compra  = Compra::find($record->compra_id);
+                                $compra->valor_total -= $record->sub_total;
+                                $produto->estoque    -= ($record->qtd);
+                                $produto->save();
+                                $compra->save();
+
+                                $prodFornecedor = [
+                                    'compra_id'  => $record->compra_id,
+                                    'produto_id' => $produto->id,
+
+                                ];
+                                ProdutoFornecedor::destroy($prodFornecedor);
+                            }
+                        })
+                        ->label('Excluir Itens Selecionados'),
                 ]),
             ]);
     }
