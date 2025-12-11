@@ -399,14 +399,14 @@
             .pagination-custom {
                 gap: 2px;
             }
-            
+
             .pagination-custom a,
             .pagination-custom span {
                 min-width: 26px;
                 height: 26px;
                 font-size: 11px;
             }
-            
+
             .pagination-custom .arrow {
                 min-width: 22px;
                 width: 22px;
@@ -423,10 +423,14 @@
     <!-- Cabeçalho Delicaty -->
     <div class="header-delicaty">
         <div class="header-logo">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo">
+            <a href="{{ route('catalogo') }}">
+                <img src="{{ asset('img/logo.png') }}" alt="Logo">
+            </a>
         </div>
         <div class="header-title">
-            <div class="header-nome">Catálogo</div>
+            <a href="{{ route('catalogo') }}" style="text-decoration: none;">
+                <div class="header-nome">Catálogo</div>
+            </a>
         </div>
         <div class="header-info">
             <div class="header-nome" style="font-size: 0.85rem; color: #bdbdbd;">Delicaty Acessórios</div>
@@ -443,33 +447,34 @@
     <div class="busca-container">
         <form method="GET" action="{{ url()->current() }}" class="busca-form">
             <input type="hidden" name="categoria" value="{{ request('categoria', 'todas') }}">
-            <input type="text" name="busca" value="{{ request('busca') }}" 
-                   placeholder="Buscar produtos por nome ou código..." class="busca-input">
+            <input type="text" name="busca" value="{{ request('busca') }}"
+                placeholder="Buscar produtos por nome ou código..." class="busca-input">
             <button type="submit" class="busca-btn">Buscar</button>
         </form>
     </div>
 
     <!-- Contador de resultados -->
     <div class="resultados-info">
-        Mostrando {{ $produtos->firstItem() ?? 0 }} - {{ $produtos->lastItem() ?? 0 }} de {{ $produtos->total() }} produtos
-        @if(request('categoria') && request('categoria') != 'todas')
+        Mostrando {{ $produtos->firstItem() ?? 0 }} - {{ $produtos->lastItem() ?? 0 }} de {{ $produtos->total() }}
+        produtos
+        @if (request('categoria') && request('categoria') != 'todas')
             na categoria "{{ request('categoria') }}"
         @endif
-        @if(request('busca'))
+        @if (request('busca'))
             para "{{ request('busca') }}"
         @endif
     </div>
 
     <!-- Barra de categorias -->
     <div class="categorias-bar">
-        <a href="{{ url()->current() }}?categoria=todas{{ request('busca') ? '&busca=' . request('busca') : '' }}"
+        <!--   <a href="{{ url()->current() }}?categoria=todas{{ request('busca') ? '&busca=' . request('busca') : '' }}"
            class="categoria-btn {{ !request('categoria') || request('categoria') == 'todas' ? 'active' : '' }}">
             Todas
-        </a>
-        
+        </a> -->
+
         @foreach ($categorias as $categoria)
             <a href="{{ url()->current() }}?categoria={{ urlencode($categoria->nome) }}{{ request('busca') ? '&busca=' . request('busca') : '' }}"
-               class="categoria-btn {{ request('categoria') == $categoria->nome ? 'active' : '' }}">
+                class="categoria-btn {{ request('categoria') == $categoria->nome ? 'active' : '' }}">
                 {{ $categoria->nome }}
             </a>
         @endforeach
@@ -490,7 +495,7 @@
 
             <div class="produto-card" data-categoria="{{ $catNome }}">
                 <img src="{{ asset('storage/' . $foto) }}" alt="{{ $produto->nome }}" class="produto-img"
-                     onclick="openModal(this)">
+                    onclick="openModal(this)">
                 <div class="produto-info">
                     <div class="produto-nome">{{ $produto->nome }}</div>
                     <div class="produto-preco">R$ {{ number_format($produto->valor_venda, 2, ',', '.') }}</div>
@@ -515,8 +520,8 @@
                     </li>
                 @else
                     <li>
-                        <a href="{{ $produtos->previousPageUrl() }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}" 
-                           class="arrow" aria-label="Anterior">
+                        <a href="{{ $produtos->previousPageUrl() }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}"
+                            class="arrow" aria-label="Anterior">
                             &laquo;
                         </a>
                     </li>
@@ -525,7 +530,8 @@
                 {{-- Primeira página --}}
                 @if ($produtos->currentPage() > 3)
                     <li>
-                        <a href="{{ $produtos->url(1) }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}">
+                        <a
+                            href="{{ $produtos->url(1) }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}">
                             1
                         </a>
                     </li>
@@ -541,7 +547,8 @@
                             <li class="active"><span>{{ $i }}</span></li>
                         @else
                             <li>
-                                <a href="{{ $produtos->url($i) }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}">
+                                <a
+                                    href="{{ $produtos->url($i) }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}">
                                     {{ $i }}
                                 </a>
                             </li>
@@ -555,7 +562,8 @@
                         <li><span class="dots">...</span></li>
                     @endif
                     <li>
-                        <a href="{{ $produtos->url($produtos->lastPage()) }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}">
+                        <a
+                            href="{{ $produtos->url($produtos->lastPage()) }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}">
                             {{ $produtos->lastPage() }}
                         </a>
                     </li>
@@ -564,8 +572,8 @@
                 {{-- Link Próximo --}}
                 @if ($produtos->hasMorePages())
                     <li>
-                        <a href="{{ $produtos->nextPageUrl() }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}" 
-                           class="arrow" aria-label="Próximo">
+                        <a href="{{ $produtos->nextPageUrl() }}{{ request('categoria') ? '&categoria=' . request('categoria') : '' }}{{ request('busca') ? '&busca=' . request('busca') : '' }}"
+                            class="arrow" aria-label="Próximo">
                             &raquo;
                         </a>
                     </li>
@@ -604,7 +612,7 @@
             document.getElementById("modalCod").textContent = cod;
             modal.style.display = "block";
             modalImg.src = imgElement.src;
-            
+
             // Configura botão de compartilhamento
             var shareBtn = document.getElementById("shareBtn");
             shareBtn.onclick = function(e) {
