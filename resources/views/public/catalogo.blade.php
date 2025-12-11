@@ -467,6 +467,7 @@
 
     <!-- Barra de categorias -->
     <div class="categorias-bar">
+        <!-- DESCOMENTAR PARA HABILITAR A CATEGORIA TODAS -->
         <!--   <a href="{{ url()->current() }}?categoria=todas{{ request('busca') ? '&busca=' . request('busca') : '' }}"
            class="categoria-btn {{ !request('categoria') || request('categoria') == 'todas' ? 'active' : '' }}">
             Todas
