@@ -126,6 +126,7 @@ class ProdutoResource extends Resource
                             ->label('Fotos')
                             ->directory('fotos-produtos')
                             ->visibility('public')
+                            ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/jpg'])
                           //  ->columnSpanFull()
                            // ->panelLayout('grid')
                             ->downloadable()
