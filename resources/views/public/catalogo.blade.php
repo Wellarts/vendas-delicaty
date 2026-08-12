@@ -441,6 +441,237 @@
             width: 32px;
             height: 32px;
         }
+
+        .produto-comprar-btn {
+            width: 100%;
+            margin-top: 12px;
+            background: #25D366;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .produto-comprar-btn:hover {
+            background: #128C7E;
+        }
+
+        .carrinho-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .carrinho-float:hover {
+            background-color: #e68900;
+            transform: scale(1.1);
+        }
+
+        .carrinho-float svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+        }
+
+        .carrinho-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #d32f2f;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .pedido-modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pedido-modal-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            animation: zoom 0.2s ease-in-out;
+        }
+
+        .pedido-modal-box h3 {
+            margin: 0 0 16px 0;
+            color: #ff9800;
+            font-size: 1.15rem;
+        }
+
+        .carrinho-lista {
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+
+        .carrinho-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .carrinho-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .carrinho-item-nome {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .carrinho-item-preco {
+            font-size: 0.8rem;
+            color: #757575;
+        }
+
+        .carrinho-item-qtd {
+            width: 52px;
+            padding: 6px;
+            border: 2px solid #eee;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .carrinho-item-qtd:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+
+        .carrinho-item-remover {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .carrinho-vazio {
+            text-align: center;
+            color: #757575;
+            padding: 30px 0;
+            font-size: 0.9rem;
+        }
+
+        .carrinho-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #444;
+            padding: 12px 0;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .pedido-modal-box label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        .pedido-modal-box input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .pedido-modal-box input:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+
+        .pedido-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .pedido-modal-actions button {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .pedido-cancelar-btn {
+            background: #f1f1f1;
+            color: #555;
+        }
+
+        .pedido-enviar-btn {
+            background: #25D366;
+            color: #fff;
+        }
+
+        .pedido-enviar-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+        }
+
+        .pedido-cancelar-btn:hover {
+            background: #e2e2e2;
+        }
+
+        .pedido-enviar-btn:hover:not(:disabled) {
+            background: #128C7E;
+        }
     </style>
 
 </head>
@@ -539,6 +770,10 @@
                     <div class="produto-nome">{{ $produto->nome }}</div>
                     <div class="produto-preco">R$ {{ number_format($produto->valor_venda, 2, ',', '.') }}</div>
                     <div class="produto-codbar">Cod: {{ $produto->codbar }}</div>
+                    <button type="button" class="produto-comprar-btn"
+                        onclick="adicionarAoCarrinho('{{ addslashes($produto->nome) }}', {{ (float) $produto->valor_venda }}, '{{ addslashes($produto->codbar) }}')">
+                        Comprar
+                    </button>
                 </div>
             </div>
         @empty
@@ -625,6 +860,37 @@
         @endif
     </div>
 
+    <!-- Botão Flutuante do Carrinho -->
+    <button type="button" class="carrinho-float" onclick="abrirCarrinho()" aria-label="Ver carrinho">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+            <path
+                d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.6c2.2 11.3 12.1 19.7 23.7 19.7H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+        </svg>
+        <span id="carrinhoBadge" class="carrinho-badge" style="display:none;">0</span>
+    </button>
+
+    <!-- Modal de Pedido / Carrinho -->
+    <div id="pedidoModalOverlay" class="pedido-modal-overlay" onclick="fecharPedido()">
+        <div class="pedido-modal-box" onclick="event.stopPropagation()">
+            <h3>Seu pedido</h3>
+
+            <div id="carrinhoLista" class="carrinho-lista"></div>
+
+            <div id="carrinhoTotal" class="carrinho-total" style="display:none;">
+                <span>Total</span>
+                <span id="carrinhoTotalValor">R$ 0,00</span>
+            </div>
+
+            <label for="pedidoNome">Seu nome</label>
+            <input type="text" id="pedidoNome" placeholder="Digite seu nome">
+
+            <div class="pedido-modal-actions">
+                <button type="button" class="pedido-cancelar-btn" onclick="fecharPedido()">Cancelar</button>
+                <button type="button" id="pedidoEnviarBtn" class="pedido-enviar-btn" onclick="enviarPedido()">Enviar pedido</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Imagem Ampliada -->
     <div id="imgModal" class="modal" onclick="closeModal()">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -676,8 +942,169 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === "Escape") {
                 closeModal();
+                fecharPedido();
             }
         });
+
+        // ---- Carrinho de Pedido via WhatsApp ----
+        var CARRINHO_STORAGE_KEY = "delicaty_carrinho_pedido";
+
+        function formatarMoeda(valor) {
+            return "R$ " + valor.toFixed(2).replace('.', ',');
+        }
+
+        function getCarrinho() {
+            try {
+                var dados = JSON.parse(localStorage.getItem(CARRINHO_STORAGE_KEY));
+                return Array.isArray(dados) ? dados : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function salvarCarrinho(carrinho) {
+            localStorage.setItem(CARRINHO_STORAGE_KEY, JSON.stringify(carrinho));
+            atualizarBadge(carrinho);
+        }
+
+        function atualizarBadge(carrinho) {
+            carrinho = carrinho || getCarrinho();
+            var totalItens = carrinho.reduce(function(soma, item) {
+                return soma + item.qtd;
+            }, 0);
+            var badge = document.getElementById("carrinhoBadge");
+            if (totalItens > 0) {
+                badge.textContent = totalItens;
+                badge.style.display = "flex";
+            } else {
+                badge.style.display = "none";
+            }
+        }
+
+        function adicionarAoCarrinho(nome, preco, codbar) {
+            var carrinho = getCarrinho();
+            var existente = carrinho.find(function(item) {
+                return item.codbar === codbar;
+            });
+
+            if (existente) {
+                existente.qtd += 1;
+            } else {
+                carrinho.push({ nome: nome, preco: preco, codbar: codbar, qtd: 1 });
+            }
+
+            salvarCarrinho(carrinho);
+        }
+
+        function atualizarQtdItem(codbar, novaQtd) {
+            novaQtd = parseInt(novaQtd, 10);
+            var carrinho = getCarrinho();
+
+            if (!novaQtd || novaQtd < 1) {
+                carrinho = carrinho.filter(function(item) {
+                    return item.codbar !== codbar;
+                });
+            } else {
+                var item = carrinho.find(function(item) {
+                    return item.codbar === codbar;
+                });
+                if (item) item.qtd = novaQtd;
+            }
+
+            salvarCarrinho(carrinho);
+            renderizarCarrinho();
+        }
+
+        function removerItemCarrinho(codbar) {
+            var carrinho = getCarrinho().filter(function(item) {
+                return item.codbar !== codbar;
+            });
+            salvarCarrinho(carrinho);
+            renderizarCarrinho();
+        }
+
+        function renderizarCarrinho() {
+            var carrinho = getCarrinho();
+            var listaEl = document.getElementById("carrinhoLista");
+            var totalEl = document.getElementById("carrinhoTotal");
+            var totalValorEl = document.getElementById("carrinhoTotalValor");
+            var enviarBtn = document.getElementById("pedidoEnviarBtn");
+
+            if (carrinho.length === 0) {
+                listaEl.innerHTML = '<div class="carrinho-vazio">Seu carrinho está vazio.</div>';
+                totalEl.style.display = "none";
+                enviarBtn.disabled = true;
+                return;
+            }
+
+            var html = "";
+            var total = 0;
+
+            carrinho.forEach(function(item) {
+                var subtotal = item.preco * item.qtd;
+                total += subtotal;
+                html += '<div class="carrinho-item">' +
+                    '<div class="carrinho-item-info">' +
+                        '<div class="carrinho-item-nome">' + item.nome + '</div>' +
+                        '<div class="carrinho-item-preco">' + formatarMoeda(item.preco) + ' cada &middot; ' + formatarMoeda(subtotal) + '</div>' +
+                    '</div>' +
+                    '<input type="number" class="carrinho-item-qtd" min="1" value="' + item.qtd + '" ' +
+                        'onchange="atualizarQtdItem(\'' + item.codbar + '\', this.value)">' +
+                    '<button type="button" class="carrinho-item-remover" onclick="removerItemCarrinho(\'' + item.codbar + '\')" aria-label="Remover item">&times;</button>' +
+                '</div>';
+            });
+
+            listaEl.innerHTML = html;
+            totalValorEl.textContent = formatarMoeda(total);
+            totalEl.style.display = "flex";
+            enviarBtn.disabled = false;
+        }
+
+        function abrirCarrinho() {
+            renderizarCarrinho();
+            document.getElementById("pedidoModalOverlay").style.display = "flex";
+        }
+
+        function fecharPedido() {
+            document.getElementById("pedidoModalOverlay").style.display = "none";
+        }
+
+        function enviarPedido() {
+            var carrinho = getCarrinho();
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio.");
+                return;
+            }
+
+            var nomeCliente = document.getElementById("pedidoNome").value.trim();
+            if (!nomeCliente) {
+                alert("Por favor, informe seu nome.");
+                return;
+            }
+
+            var total = 0;
+            var linhas = carrinho.map(function(item) {
+                var subtotal = item.preco * item.qtd;
+                total += subtotal;
+                return "- " + item.nome + " (Cod: " + item.codbar + ") x" + item.qtd + " = " + formatarMoeda(subtotal);
+            });
+
+            var mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n" +
+                linhas.join("\n") +
+                "\n\nTotal: " + formatarMoeda(total) +
+                "\n\nNome: " + nomeCliente;
+
+            var numeroWhatsapp = "5587999317326";
+            var url = "https://wa.me/" + numeroWhatsapp + "?text=" + encodeURIComponent(mensagem);
+            window.open(url, "_blank");
+
+            salvarCarrinho([]);
+            renderizarCarrinho();
+            fecharPedido();
+        }
+
+        // Atualiza o badge do carrinho ao carregar a página
+        atualizarBadge();
     </script>
 </body>
 
