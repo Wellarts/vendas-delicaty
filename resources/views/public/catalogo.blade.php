@@ -460,6 +460,65 @@
             background: #128C7E;
         }
 
+        /* Estado do botão quando o produto já está no carrinho:
+           fica cinza e com o texto "Adicionar + 1" (continua clicável
+           para permitir adicionar mais unidades). */
+        .produto-comprar-btn.adicionado {
+            background: #9e9e9e;
+        }
+
+        .produto-comprar-btn.adicionado:hover {
+            background: #8a8a8a;
+        }
+
+        /* ===================================================================
+           Toast de notificação (aviso de "produto adicionado ao carrinho")
+           =================================================================== */
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast-item {
+            background: #323232;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-item-icone {
+            color: #25D366;
+            font-weight: 700;
+        }
+
+        /* ===================================================================
+           CSS do Carrinho de Pedido (botão flutuante + modal com lista)
+           =================================================================== */
+
+        /* Botão redondo fixo no canto inferior esquerdo que abre o carrinho */
         .carrinho-float {
             position: fixed;
             bottom: 20px;
@@ -490,6 +549,7 @@
             fill: #fff;
         }
 
+        /* Círculo vermelho com o número de itens no carrinho */
         .carrinho-badge {
             position: absolute;
             top: -4px;
@@ -507,6 +567,7 @@
             padding: 0 4px;
         }
 
+        /* Fundo escurecido que cobre a tela quando o modal do carrinho está aberto */
         .pedido-modal-overlay {
             display: none;
             position: fixed;
@@ -521,6 +582,7 @@
             padding: 20px;
         }
 
+        /* Caixa branca central do modal (contém a lista de itens e o formulário) */
         .pedido-modal-box {
             background: #fff;
             border-radius: 12px;
@@ -540,11 +602,13 @@
             font-size: 1.15rem;
         }
 
+        /* Área com scroll que contém as linhas de itens do carrinho */
         .carrinho-lista {
             overflow-y: auto;
             margin-bottom: 12px;
         }
 
+        /* Cada linha de item: nome/preço + campo de quantidade + botão remover */
         .carrinho-item {
             display: flex;
             align-items: center;
@@ -596,6 +660,7 @@
             padding: 0 4px;
         }
 
+        /* Mensagem exibida quando não há itens no carrinho */
         .carrinho-vazio {
             text-align: center;
             color: #757575;
@@ -603,6 +668,7 @@
             font-size: 0.9rem;
         }
 
+        /* Linha de total geral do pedido, no rodapé da lista */
         .carrinho-total {
             display: flex;
             justify-content: space-between;
@@ -770,7 +836,11 @@
                     <div class="produto-nome">{{ $produto->nome }}</div>
                     <div class="produto-preco">R$ {{ number_format($produto->valor_venda, 2, ',', '.') }}</div>
                     <div class="produto-codbar">Cod: {{ $produto->codbar }}</div>
-                    <button type="button" class="produto-comprar-btn"
+                    <!-- Adiciona este produto ao carrinho (não abre modal individual).
+                         data-codbar identifica o botão para que o JS consiga
+                         atualizar sua aparência (cor cinza + texto "Adicionar + 1")
+                         quando o produto já estiver no carrinho. -->
+                    <button type="button" class="produto-comprar-btn" data-codbar="{{ $produto->codbar }}"
                         onclick="adicionarAoCarrinho('{{ addslashes($produto->nome) }}', {{ (float) $produto->valor_venda }}, '{{ addslashes($produto->codbar) }}')">
                         Comprar
                     </button>
@@ -860,20 +930,28 @@
         @endif
     </div>
 
-    <!-- Botão Flutuante do Carrinho -->
+    <!-- Container das notificações (toasts) de "produto adicionado ao carrinho" -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Botão Flutuante do Carrinho: mostra a quantidade de itens (badge)
+         e, ao ser clicado, abre o modal com a lista do pedido -->
     <button type="button" class="carrinho-float" onclick="abrirCarrinho()" aria-label="Ver carrinho">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <path
                 d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.6c2.2 11.3 12.1 19.7 23.7 19.7H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
         </svg>
+        <!-- Badge com o total de itens; fica oculto quando o carrinho está vazio -->
         <span id="carrinhoBadge" class="carrinho-badge" style="display:none;">0</span>
     </button>
 
-    <!-- Modal de Pedido / Carrinho -->
+    <!-- Modal de Pedido / Carrinho: lista os itens adicionados, permite
+         editar quantidade ou excluir, mostra o total e só dispara o envio
+         para o WhatsApp quando o cliente confirma no botão "Enviar pedido" -->
     <div id="pedidoModalOverlay" class="pedido-modal-overlay" onclick="fecharPedido()">
         <div class="pedido-modal-box" onclick="event.stopPropagation()">
             <h3>Seu pedido</h3>
 
+            <!-- Preenchido dinamicamente por renderizarCarrinho() -->
             <div id="carrinhoLista" class="carrinho-lista"></div>
 
             <div id="carrinhoTotal" class="carrinho-total" style="display:none;">
@@ -886,6 +964,7 @@
 
             <div class="pedido-modal-actions">
                 <button type="button" class="pedido-cancelar-btn" onclick="fecharPedido()">Cancelar</button>
+                <!-- Fica desabilitado enquanto o carrinho estiver vazio -->
                 <button type="button" id="pedidoEnviarBtn" class="pedido-enviar-btn" onclick="enviarPedido()">Enviar pedido</button>
             </div>
         </div>
@@ -905,6 +984,9 @@
     </div>
 
     <script>
+        // Abre o modal de imagem ampliada ao clicar na foto do produto,
+        // exibindo nome, preço e código, além de configurar o botão
+        // de compartilhamento (usa a Web Share API quando disponível).
         function openModal(imgElement) {
             var card = imgElement.closest('.produto-card');
             var nome = card.querySelector('.produto-nome').textContent;
@@ -934,11 +1016,13 @@
             };
         }
 
+        // Fecha o modal de imagem ampliada
         function closeModal() {
             document.getElementById("imgModal").style.display = "none";
         }
 
-        // Fecha com ESC
+        // Permite fechar tanto o modal de imagem quanto o modal do
+        // carrinho pressionando a tecla ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === "Escape") {
                 closeModal();
@@ -946,13 +1030,26 @@
             }
         });
 
-        // ---- Carrinho de Pedido via WhatsApp ----
+        // =====================================================================
+        // CARRINHO DE PEDIDO VIA WHATSAPP
+        // O carrinho é um array de objetos { nome, preco, codbar, qtd }
+        // salvo no localStorage do navegador, o que permite que o cliente
+        // navegue entre páginas/categorias/buscas sem perder os itens
+        // adicionados. O pedido só é enviado ao WhatsApp quando o cliente
+        // clica em "Enviar pedido" no modal do carrinho.
+        // =====================================================================
+
+        // Chave usada para salvar/ler o carrinho no localStorage
         var CARRINHO_STORAGE_KEY = "delicaty_carrinho_pedido";
 
+        // Formata um número (ex: 19.9) como moeda brasileira (ex: "R$ 19,90")
         function formatarMoeda(valor) {
             return "R$ " + valor.toFixed(2).replace('.', ',');
         }
 
+        // Lê o carrinho salvo no localStorage.
+        // Retorna sempre um array (mesmo se não houver nada salvo ou
+        // se o conteúdo estiver corrompido/inválido).
         function getCarrinho() {
             try {
                 var dados = JSON.parse(localStorage.getItem(CARRINHO_STORAGE_KEY));
@@ -962,11 +1059,18 @@
             }
         }
 
+        // Persiste o array do carrinho no localStorage e atualiza tanto
+        // o contador (badge) do botão flutuante quanto a aparência dos
+        // botões "Comprar" de cada produto (cinza/"Adicionar + 1" ou normal).
         function salvarCarrinho(carrinho) {
             localStorage.setItem(CARRINHO_STORAGE_KEY, JSON.stringify(carrinho));
             atualizarBadge(carrinho);
+            atualizarBotoesProdutos(carrinho);
         }
 
+        // Atualiza o número exibido no badge do botão flutuante do carrinho,
+        // somando a quantidade de todos os itens. Se o carrinho estiver
+        // vazio, o badge fica escondido.
         function atualizarBadge(carrinho) {
             carrinho = carrinho || getCarrinho();
             var totalItens = carrinho.reduce(function(soma, item) {
@@ -981,6 +1085,59 @@
             }
         }
 
+        // Percorre todos os botões "Comprar" da página (identificados pelo
+        // atributo data-codbar) e ajusta a aparência de cada um conforme o
+        // produto já esteja ou não no carrinho: se estiver, fica cinza com
+        // o texto "Adicionar + 1"; caso contrário, volta ao normal ("Comprar").
+        function atualizarBotoesProdutos(carrinho) {
+            carrinho = carrinho || getCarrinho();
+            var codbarsNoCarrinho = carrinho.map(function(item) {
+                return item.codbar;
+            });
+
+            document.querySelectorAll('.produto-comprar-btn[data-codbar]').forEach(function(btn) {
+                var codbar = btn.getAttribute('data-codbar');
+                if (codbarsNoCarrinho.indexOf(codbar) !== -1) {
+                    btn.classList.add('adicionado');
+                    btn.textContent = 'Adicionar + 1';
+                } else {
+                    btn.classList.remove('adicionado');
+                    btn.textContent = 'Comprar';
+                }
+            });
+        }
+
+        // Cria e exibe uma notificação (toast) temporária no topo da tela,
+        // usada para avisar que um produto foi adicionado ao carrinho.
+        // O elemento some sozinho após alguns segundos.
+        function mostrarNotificacao(texto) {
+            var container = document.getElementById('toastContainer');
+
+            var toast = document.createElement('div');
+            toast.className = 'toast-item';
+            toast.innerHTML = '<span class="toast-item-icone">&#10003;</span><span>' + texto + '</span>';
+            container.appendChild(toast);
+
+            // Pequeno atraso para garantir a transição de entrada (fade/slide)
+            setTimeout(function() {
+                toast.classList.add('show');
+            }, 10);
+
+            // Remove o toast após um tempo, com transição de saída
+            setTimeout(function() {
+                toast.classList.remove('show');
+                setTimeout(function() {
+                    toast.remove();
+                }, 250);
+            }, 2200);
+        }
+
+        // Chamada pelo botão "Comprar" de cada produto.
+        // Se o produto (identificado pelo código de barras) já está no
+        // carrinho, apenas incrementa a quantidade em 1. Caso contrário,
+        // adiciona um novo item com quantidade inicial 1.
+        // Em ambos os casos, exibe uma notificação (toast) confirmando
+        // a ação para o usuário.
         function adicionarAoCarrinho(nome, preco, codbar) {
             var carrinho = getCarrinho();
             var existente = carrinho.find(function(item) {
@@ -994,8 +1151,13 @@
             }
 
             salvarCarrinho(carrinho);
+            mostrarNotificacao(nome + ' adicionado ao carrinho');
         }
 
+        // Chamada quando o cliente edita manualmente o campo de quantidade
+        // de um item dentro do modal do carrinho.
+        // Se o valor digitado for inválido ou menor que 1, o item é removido
+        // do carrinho (equivalente a zerar a quantidade).
         function atualizarQtdItem(codbar, novaQtd) {
             novaQtd = parseInt(novaQtd, 10);
             var carrinho = getCarrinho();
@@ -1012,9 +1174,10 @@
             }
 
             salvarCarrinho(carrinho);
-            renderizarCarrinho();
+            renderizarCarrinho(); // redesenha a lista para refletir a mudança
         }
 
+        // Remove um item específico do carrinho (botão "×" de cada linha).
         function removerItemCarrinho(codbar) {
             var carrinho = getCarrinho().filter(function(item) {
                 return item.codbar !== codbar;
@@ -1023,6 +1186,11 @@
             renderizarCarrinho();
         }
 
+        // Redesenha a lista de itens dentro do modal do carrinho, com base
+        // no que está salvo no localStorage. Monta o HTML de cada linha
+        // (nome, preço, campo de quantidade editável e botão de remover),
+        // calcula o total geral e habilita/desabilita o botão "Enviar pedido"
+        // conforme o carrinho está vazio ou não.
         function renderizarCarrinho() {
             var carrinho = getCarrinho();
             var listaEl = document.getElementById("carrinhoLista");
@@ -1030,6 +1198,7 @@
             var totalValorEl = document.getElementById("carrinhoTotalValor");
             var enviarBtn = document.getElementById("pedidoEnviarBtn");
 
+            // Carrinho vazio: mostra aviso e trava o botão de envio
             if (carrinho.length === 0) {
                 listaEl.innerHTML = '<div class="carrinho-vazio">Seu carrinho está vazio.</div>';
                 totalEl.style.display = "none";
@@ -1040,6 +1209,7 @@
             var html = "";
             var total = 0;
 
+            // Monta uma linha de HTML para cada item do carrinho
             carrinho.forEach(function(item) {
                 var subtotal = item.preco * item.qtd;
                 total += subtotal;
@@ -1048,8 +1218,10 @@
                         '<div class="carrinho-item-nome">' + item.nome + '</div>' +
                         '<div class="carrinho-item-preco">' + formatarMoeda(item.preco) + ' cada &middot; ' + formatarMoeda(subtotal) + '</div>' +
                     '</div>' +
+                    // Campo de quantidade: ao alterar, chama atualizarQtdItem
                     '<input type="number" class="carrinho-item-qtd" min="1" value="' + item.qtd + '" ' +
                         'onchange="atualizarQtdItem(\'' + item.codbar + '\', this.value)">' +
+                    // Botão de excluir o item
                     '<button type="button" class="carrinho-item-remover" onclick="removerItemCarrinho(\'' + item.codbar + '\')" aria-label="Remover item">&times;</button>' +
                 '</div>';
             });
@@ -1060,15 +1232,23 @@
             enviarBtn.disabled = false;
         }
 
+        // Abre o modal do carrinho, garantindo que a lista exibida
+        // esteja sempre atualizada antes de aparecer na tela.
         function abrirCarrinho() {
             renderizarCarrinho();
             document.getElementById("pedidoModalOverlay").style.display = "flex";
         }
 
+        // Fecha o modal do carrinho (botão "Cancelar", ESC ou clique fora da caixa).
         function fecharPedido() {
             document.getElementById("pedidoModalOverlay").style.display = "none";
         }
 
+        // Chamada pelo botão "Enviar pedido". Valida que o carrinho não está
+        // vazio e que o nome do cliente foi informado, monta uma única
+        // mensagem de texto com todos os itens (nome, código, quantidade e
+        // subtotal) mais o total geral, abre o WhatsApp com a mensagem
+        // pré-preenchida e, por fim, limpa o carrinho e fecha o modal.
         function enviarPedido() {
             var carrinho = getCarrinho();
             if (carrinho.length === 0) {
@@ -1082,6 +1262,7 @@
                 return;
             }
 
+            // Monta uma linha de texto para cada item e acumula o total
             var total = 0;
             var linhas = carrinho.map(function(item) {
                 var subtotal = item.preco * item.qtd;
@@ -1094,17 +1275,22 @@
                 "\n\nTotal: " + formatarMoeda(total) +
                 "\n\nNome: " + nomeCliente;
 
+            // Número do WhatsApp que receberá o pedido (formato internacional: 55 + DDD + número)
             var numeroWhatsapp = "5587999317326";
             var url = "https://wa.me/" + numeroWhatsapp + "?text=" + encodeURIComponent(mensagem);
             window.open(url, "_blank");
 
+            // Pedido enviado: esvazia o carrinho e fecha o modal
             salvarCarrinho([]);
             renderizarCarrinho();
             fecharPedido();
         }
 
-        // Atualiza o badge do carrinho ao carregar a página
+        // Ao carregar a página, sincroniza o badge do botão flutuante e a
+        // aparência dos botões "Comprar" com o que já estiver salvo no
+        // localStorage (caso o cliente tenha itens de uma visita anterior).
         atualizarBadge();
+        atualizarBotoesProdutos();
     </script>
 </body>
 
