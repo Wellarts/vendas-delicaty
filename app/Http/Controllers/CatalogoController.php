@@ -28,6 +28,9 @@ class CatalogoController extends Controller
             });
         }
         
+        // Produtos adicionados ou atualizados recentemente primeiro
+        $query->orderByDesc('updated_at')->orderByDesc('id');
+
         $produtos = $query->paginate(9);
         $categorias = Categoria::has('produtos')->get();
         

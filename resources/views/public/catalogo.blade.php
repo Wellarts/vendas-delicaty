@@ -31,8 +31,8 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: #faf6f1;
+            color: #3e2c1c;
         }
 
         .header-delicaty {
@@ -55,7 +55,7 @@
             height: 70px;
             width: auto;
             border-radius: 12px;
-            background: #f9f9f9;
+            background: #faf6f1;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
@@ -67,7 +67,7 @@
         .header-nome {
             font-size: 2rem;
             font-weight: 700;
-            color: #ff9800;
+            color: #956737;
             letter-spacing: 1px;
             margin: 0;
         }
@@ -77,7 +77,7 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 6px;
-            color: #bdbdbd;
+            color: #b59a80;
             font-size: 0.85rem;
         }
 
@@ -105,13 +105,13 @@
         .busca-input {
             flex: 1;
             padding: 12px;
-            border: 2px solid #ff9800;
+            border: 2px solid #956737;
             border-radius: 8px;
             font-size: 1rem;
         }
 
         .busca-btn {
-            background: #ff9800;
+            background: #956737;
             color: white;
             border: none;
             padding: 0 24px;
@@ -157,7 +157,7 @@
 
         .produto-nome {
             font-size: 1.1rem;
-            color: #ff9800;
+            color: #956737;
             font-weight: 600;
             margin-bottom: 6px;
         }
@@ -186,8 +186,8 @@
 
         .categoria-btn {
             background: #fff;
-            border: 1px solid #ff9800;
-            color: #ff9800;
+            border: 1px solid #956737;
+            color: #956737;
             border-radius: 8px;
             padding: 8px 18px;
             font-size: 1rem;
@@ -200,7 +200,7 @@
 
         .categoria-btn.active,
         .categoria-btn:hover {
-            background: #ff9800;
+            background: #956737;
             color: #fff;
         }
 
@@ -335,16 +335,16 @@
 
         /* Página ativa */
         .pagination-custom .active span {
-            background-color: #ff9800;
-            border-color: #ff9800;
+            background-color: #956737;
+            border-color: #956737;
             color: white;
             font-weight: 600;
         }
 
         /* Hover */
         .pagination-custom a:hover {
-            background-color: #ff9800;
-            border-color: #ff9800;
+            background-color: #956737;
+            border-color: #956737;
             color: white;
         }
 
@@ -489,7 +489,7 @@
         }
 
         .toast-item {
-            background: #323232;
+            background: #3e2c1c;
             color: #fff;
             padding: 12px 20px;
             border-radius: 8px;
@@ -525,7 +525,7 @@
             left: 20px;
             width: 60px;
             height: 60px;
-            background-color: #ff9800;
+            background-color: #956737;
             color: #fff;
             border: none;
             border-radius: 50px;
@@ -539,7 +539,7 @@
         }
 
         .carrinho-float:hover {
-            background-color: #e68900;
+            background-color: #7a5229;
             transform: scale(1.1);
         }
 
@@ -598,7 +598,7 @@
 
         .pedido-modal-box h3 {
             margin: 0 0 16px 0;
-            color: #ff9800;
+            color: #956737;
             font-size: 1.15rem;
         }
 
@@ -614,7 +614,7 @@
             align-items: center;
             gap: 10px;
             padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #efe6dc;
         }
 
         .carrinho-item-info {
@@ -639,7 +639,7 @@
         .carrinho-item-qtd {
             width: 52px;
             padding: 6px;
-            border: 2px solid #eee;
+            border: 2px solid #eadfd3;
             border-radius: 6px;
             font-size: 0.9rem;
             text-align: center;
@@ -647,7 +647,7 @@
 
         .carrinho-item-qtd:focus {
             outline: none;
-            border-color: #ff9800;
+            border-color: #956737;
         }
 
         .carrinho-item-remover {
@@ -676,7 +676,7 @@
             font-weight: 700;
             color: #444;
             padding: 12px 0;
-            border-top: 2px solid #f0f0f0;
+            border-top: 2px solid #efe6dc;
         }
 
         .pedido-modal-box label {
@@ -690,7 +690,7 @@
         .pedido-modal-box input[type="text"] {
             width: 100%;
             padding: 10px;
-            border: 2px solid #eee;
+            border: 2px solid #eadfd3;
             border-radius: 8px;
             font-size: 1rem;
             margin-bottom: 16px;
@@ -698,7 +698,7 @@
 
         .pedido-modal-box input:focus {
             outline: none;
-            border-color: #ff9800;
+            border-color: #956737;
         }
 
         .pedido-modal-actions {
@@ -757,7 +757,7 @@
             </a>
         </div>
         <div class="header-info">
-            <div class="header-nome" style="font-size: 0.85rem; color: #bdbdbd;">Delicaty Acessórios</div>
+            <div class="header-nome" style="font-size: 0.85rem; color: #b59a80;">Delicaty Acessórios</div>
             <div class="header-instagram">
                 <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"
                     style="height: 16px; vertical-align: middle;">
@@ -975,11 +975,11 @@
         <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="modalImg">
         <div id="modalInfo" style="text-align:center; margin-top:18px; color:#fff;">
-            <div id="modalNome" style="font-size:1.3rem; font-weight:700; color:#ff9800;"></div>
+            <div id="modalNome" style="font-size:1.3rem; font-weight:700; color:#956737;"></div>
             <div id="modalPreco" style="font-size:1.1rem; font-weight:600; color:#fff;"></div>
             <div id="modalCod" style="font-size:0.95rem; color:#bdbdbd;"></div>
             <button id="shareBtn"
-                style="margin-top:18px; background:#ff9800; color:#fff; border:none; border-radius:8px; padding:10px 22px; font-size:1rem; font-weight:600; cursor:pointer;">Compartilhar</button>
+                style="margin-top:18px; background:#956737; color:#fff; border:none; border-radius:8px; padding:10px 22px; font-size:1rem; font-weight:600; cursor:pointer;">Compartilhar</button>
         </div>
     </div>
 
