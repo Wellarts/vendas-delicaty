@@ -445,7 +445,7 @@
         .produto-comprar-btn {
             width: 100%;
             margin-top: 12px;
-            background: #25D366;
+            background: #956737;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -457,7 +457,7 @@
         }
 
         .produto-comprar-btn:hover {
-            background: #128C7E;
+            background: #7a5229;
         }
 
         /* Estado do botão quando o produto já está no carrinho:
